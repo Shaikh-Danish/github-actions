@@ -1,4 +1,4 @@
-name: Deploy to GKE
+name: Learn GitHub Actions
 
 on:
   push:
@@ -6,8 +6,31 @@ on:
       - main
 
 jobs:
-  say_hello:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Print message
-        run: echo "🎉 Hello, GitHub Actions!"
+      # 1️⃣ Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'  # Enable caching for pnpm dependencies
+
+      # 3️⃣ Setup pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9 # or your preferred pnpm version
+
+      # 4️⃣ Install dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5️⃣ Run tests
+      - name: Run tests
+        run: pnpm test
