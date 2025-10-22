@@ -2,8 +2,7 @@ name: Learn GitHub Actions
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
@@ -19,18 +18,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'pnpm'  # Enable caching for pnpm dependencies
+          cache: 'pnpm'
 
       # 3️⃣ Setup pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9 # or your preferred pnpm version
+          version: 9  # or your preferred pnpm version
+          run_install: false  # skip auto-install here
 
-      # 4️⃣ Install dependencies
+      # 4️⃣ Verify pnpm installation (optional but useful for debugging)
+      - name: Check pnpm version
+        run: pnpm --version
+
+      # 5️⃣ Install dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5️⃣ Run tests
+      # 6️⃣ Run tests
       - name: Run tests
         run: pnpm test
